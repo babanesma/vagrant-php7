@@ -1,0 +1,3 @@
+[submodule "php7/php-src"]
+	path = php7/php-src
+	url = git@github.com:php/php-src.git
