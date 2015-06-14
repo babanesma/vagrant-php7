@@ -17,7 +17,7 @@ sudo apt-get install mysql-server -y ;
 sudo apt-get install mysql-client libmysqlclient-dev -y ;
 
 
-cd /vagrant/php-src ;
+cd /vagrant/php7/php-src ;
 ./buildconf ;
 ./configure \
     --prefix=/vagrant/php7/usr \
@@ -59,9 +59,13 @@ cd /vagrant/php-src ;
 make ;
 make install ;
 
+# copy ini file
+sudo cp /vagrant/php7/php-src/php.ini-development /usr/local/php.ini
+
+
 # enable php7 with apache
-# cp /vagrant/php-src/libphp7.so /usr/lib/apache2/modules/ ;
-# cp /vagrant/php-src/php7.load /etc/apache2/mods-available/ ;
+# cp /vagrant/php7/usr/libphp7.so /usr/lib/apache2/modules/ ;
+# cp /vagrant/php7/usr/php7.load /etc/apache2/mods-available/ ;
 
 # echo "<FilesMatch \.php$>\n
 # SetHandler application/x-httpd-php\n
