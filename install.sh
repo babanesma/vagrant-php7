@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # upgrade the platform
-sudo apt-get update ; sudo apt-get upgrade -y ;
+    sudo apt-get update ; sudo apt-get upgrade -y ;
 
 # install prerequisities
 sudo apt-get install librecode-dev autoconf re2c bison libxml2-dev libcurl4-openssl-dev libzip-dev libjpeg-dev libpng++-dev libxpm-dev libfreetype6-dev libgmp-dev libmcrypt-dev libpspell-dev libt1-dev libbz2-dev -y ;
 sudo ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h ;
 
 # install apache2
-sudo apt-get install apache2 -y ;
+sudo apt-get install apache2 apache2-mpm-event libapache2-mod-fcgid libpcre3 libpcre3-dev -y ;
 
 # install mysql-server
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' ;
@@ -16,7 +16,14 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again p
 sudo apt-get install mysql-server -y ;
 sudo apt-get install mysql-client libmysqlclient-dev -y ;
 
+# install git and clone the repo
+sudo apt-get install git -y;
+cd /vagrant;
+mkdir php7 -p; 
+cd php7;
+git clone --depth 1 https://github.com/php/php-src.git ;
 
+# start installing php7;
 cd /vagrant/php7/php-src ;
 ./buildconf ;
 ./configure \
@@ -54,7 +61,8 @@ cd /vagrant/php7/php-src ;
     --with-zlib=/usr \
     --with-bz2=/usr \
     --with-recode=/usr \
-    --with-mysqli=/usr/bin/mysql_config ;
+    --with-mysqli=/usr/bin/mysql_config \
+    --with-apxs2=/usr/bin/apxs2 ;
 
 make ;
 make install ;
