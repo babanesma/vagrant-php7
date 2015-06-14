@@ -42,10 +42,8 @@ git pull ;
     --with-zlib=/usr \
     --with-bz2=/usr \
     --with-recode=/usr \
-    --with-mysqli=/usr/bin/mysql_config ;
+    --with-mysqli=/usr/bin/mysql_config \
+    --with-apxs2=/usr/bin/apxs2 ;
 
 make ;
-make install ;
-
-# copy ini file
-sudo cp /vagrant/php7/php-src/php.ini-development /usr/local/php.ini
+sudo make install ;

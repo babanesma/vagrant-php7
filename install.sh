@@ -4,11 +4,12 @@
     sudo apt-get update ; sudo apt-get upgrade -y ;
 
 # install prerequisities
-sudo apt-get install librecode-dev autoconf re2c bison libxml2-dev libcurl4-openssl-dev libzip-dev libjpeg-dev libpng++-dev libxpm-dev libfreetype6-dev libgmp-dev libmcrypt-dev libpspell-dev libt1-dev libbz2-dev -y ;
+sudo apt-get install librecode-dev autoconf re2c bison libxml2-dev libcurl4-openssl-dev libzip-dev libjpeg-dev libpng++-dev libxpm-dev libfreetype6-dev libgmp-dev libmcrypt-dev libpspell-dev libt1-dev libbz2-dev libperl-dev -y ;
 sudo ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h ;
 
 # install apache2
-sudo apt-get install apache2 apache2-mpm-event libapache2-mod-fcgid libpcre3 libpcre3-dev -y ;
+sudo apt-get install apache2 apache2-mpm-event libapache2-mod-fcgid -y;
+sudo apt-get install apache2-dev libpcre3 libpcre3-dev -y;
 
 # install mysql-server
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' ;
@@ -65,21 +66,22 @@ cd /vagrant/php7/php-src ;
     --with-apxs2=/usr/bin/apxs2 ;
 
 make ;
-make install ;
+sudo make install ;
 
 # copy ini file
 sudo cp /vagrant/php7/php-src/php.ini-development /usr/local/php.ini
 
+# link php executable 
+sudo ln -sf /usr/local/php/bin/php /usr/bin/php
 
-# enable php7 with apache
-# cp /vagrant/php7/usr/libphp7.so /usr/lib/apache2/modules/ ;
-# cp /vagrant/php7/usr/php7.load /etc/apache2/mods-available/ ;
-
-# echo "<FilesMatch \.php$>\n
-# SetHandler application/x-httpd-php\n
-# </FilesMatch>" >> /etc/apache2/apache2.conf ;
+# replace /etc/apache2/sites-available/000-default.conf or other vhost conf file
+# to add this line
+# AddType application/x-httpd-php .php .phtml
+sudo cp /vagrant/templates/apache2/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # switch to mpm_prefork and enable the PHP mpm module
-# sudo a2dismod mpm_event ;
-# sudo a2enmod mpm_prefork ;
-# sudo a2enmod php7 ;
+sudo a2dismod mpm_event ;
+sudo a2enmod mpm_prefork ;
+
+# restart apache 
+sudo service apache2 restart ;
