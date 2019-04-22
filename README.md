@@ -9,3 +9,5 @@ Vagrant machine Apache2 + mysql5.5 + php7
     vagrant up
 
 then open your browser and go to <http://localhost:8080/test.php>
+
+## Testing
